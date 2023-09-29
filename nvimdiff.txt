@@ -9,14 +9,6 @@ following:
 					or
 	git config --global merge.tool nvimdiff
 
-if you run this, instead
-
-	git config --global merge.tool
-
-you will be prompted with a list of available tools both already on the system
-and those who can be installed but are not present.
-
-
 ===============================================================================
 MERGING
 
