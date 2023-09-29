@@ -1,0 +1,84 @@
+				HOW TO RESOLVE MERGE CONFLICTS WITH NVIMDIFF
+===============================================================================
+SETTING GIT MERGE TOOL
+
+to set vimdiff or nvimdiff as your default merging tool, just run the 
+following:
+	
+	git config --global merge.tool vimdiff
+					or
+	git config --global merge.tool nvimdiff
+
+if you run this, instead
+
+	git config --global merge.tool
+
+you will be prompted with a list of available tools both already on the system
+and those who can be installed but are not present.
+
+
+===============================================================================
+MERGING
+
+To start the merging operation, run:
+	
+	git mergetool
+
+							LAYOUT
+			------------------------------------------
+			|             |           |              |
+			|   LOCAL     |   BASE    |   REMOTE     |
+			|             |           |              |
+			------------------------------------------
+			|                                        |
+			|                MERGED                  |
+			|                                        |
+			------------------------------------------
+
+the MERGED pane is the FINAL version and while LOCAL and REMOTE are self 
+explainatory, the BASE pane is only the "intersection" of LOCAL and 
+REMOTE, in other words it is the common ancestor of LOCAL and REMOTE files.
+
+To select the DIFF to get and put on the merged file, you can easly do it by:
+	]c (next)
+	[c (previous)
+
+Now thje tricky part: once a diff is highlighted in the MERGED file, you can
+use :diffget <source> to get the desired code from the desired file.
+
+	:diffget LO  (from local)
+	:diffget RE  (from remote)
+	:diffget BA  (from base)
+
+you can also edit code yourself by just getting a version from any of the above
+versions first (you must diffget before editing) and then go to the insert mode
+and edit as you wish.
+
+since diffget command is defined as below:
+```
+	 :[range]diffg[et] [bufspec]
+					Modify the current buffer to undo difference with another
+					buffer.  [...]
+					See below for [range].
+When no [range] is given, the diff at the cursor position or just above it is
+affected.  When [range] is used, Vim tries to only put or get the specified
+lines.
+```
+you can diffget all chunks from only one of REMOTE, LOCAL or BASE, 
+just use:
+
+	:%diffget <source>
+
+same goes for diffgetting from a selected range of code in visual mode:
+
+	:'<,'>diffget <source>
+
+
+
+Once done: save the merge result AND quit all windows `:wqa`
+
+===============================================================================
+ABORTING MERGE GRACEFULLY
+
+If you want to abort merging the current file and not mark it as resolved, 
+quit with :cquit instead of `:qa!`
